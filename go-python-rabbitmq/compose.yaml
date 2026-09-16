@@ -1,0 +1,28 @@
+services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    environment:
+      RABBITMQ_DEFAULT_USER: demo
+      RABBITMQ_DEFAULT_PASS: demo
+    ports:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  go-service:
+    build: ./go-service
+    environment:
+      RABBITMQ_URL: amqp://demo:demo@rabbitmq:5672/
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+  python-service:
+    build: ./python-service
+    environment:
+      RABBITMQ_URL: amqp://demo:demo@rabbitmq:5672/
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
