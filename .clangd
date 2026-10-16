@@ -1,3 +1,10 @@
 Completion:
   AllScopes: true
   HeaderInsertion: Never
+
+# C++
+If:
+  PathMatch: '.*\.(cpp|cc|cxx|hpp|hxx)$'
+CompileFlags:
+  Remove: [-std=*]
+  Add: [-std=c++23]

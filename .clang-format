@@ -5,10 +5,12 @@ IndentWidth: 8
 ContinuationIndentWidth: 8
 
 AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveDeclarations: Consecutive
 AlignTrailingComments:
   Kind: Always
 
 DerivePointerAlignment: false
+PointerAlignment: Left
 
 BreakBeforeBraces: Attach
 AllowShortFunctionsOnASingleLine: Empty
