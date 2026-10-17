@@ -7,11 +7,13 @@
 #define MAX_N 1000
 
 void get_prime(int p1[2]) {
+        // 关闭写端，让子进程读到 EOF
         close(p1[1]);
 
+        // 每一层收到的第一个数一定是素数
+        // 先知道筛子，再 fork
         int     n;
         ssize_t ret = read(p1[0], &n, sizeof(n));
-
         if (ret == 0) {
                 close(p1[0]);
                 exit(0);
@@ -35,7 +37,6 @@ void get_prime(int p1[2]) {
                 perror("fork");
                 exit(1);
         }
-
         if (pid == 0) {
                 close(p1[0]);
                 get_prime(p2);
@@ -48,7 +49,6 @@ void get_prime(int p1[2]) {
                                 fprintf(stderr, "incomplete integer\n");
                                 exit(1);
                         }
-
                         if (m % n != 0) {
                                 if (write(p2[1], &m, sizeof(m)) != sizeof(m)) {
                                         perror("write");
@@ -56,7 +56,6 @@ void get_prime(int p1[2]) {
                                 }
                         }
                 }
-
                 if (ret < 0) {
                         perror("read");
                         exit(1);
@@ -81,16 +80,14 @@ int main(int argc, char* argv[]) {
                 fprintf(stderr, "Usage: %s [2-%d]\n", argv[0], MAX_N);
                 return 1;
         }
-
         if (argc == 2) {
                 char* end;
                 long  n = strtol(argv[1], &end, 10);
-
+                // end == argv[1] 表示一个字符都没有解析出来
                 if (*end != '\0' || end == argv[1] || n < 2 || n > MAX_N) {
                         fprintf(stderr, "Range must be 2-%d\n", MAX_N);
                         return 1;
                 }
-
                 limit = (int)n;
         }
 
@@ -105,19 +102,18 @@ int main(int argc, char* argv[]) {
                 perror("fork");
                 return 1;
         }
-
-        if (pid == 0) {
+        if (pid == 0) {  // 当前执行代码的进程是刚创建出来的那个子进程
                 get_prime(p);
         } else {
+                // fork 会把父进程的 fd 表整个复制给子进程，所以 fork 之后，父子各自都同时持有两端
                 close(p[0]);
-
                 for (int i = 2; i <= limit; i++) {
                         if (write(p[1], &i, sizeof(i)) != sizeof(i)) {
                                 perror("write");
                                 return 1;
                         }
                 }
-
+                // 写完就关，让子进程读到 EOF
                 close(p[1]);
 
                 if (waitpid(pid, NULL, 0) < 0) {
