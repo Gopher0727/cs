@@ -3,6 +3,8 @@ ColumnLimit: 120
 
 IndentWidth: 8
 ContinuationIndentWidth: 8
+AccessModifierOffset: -8
+IndentAccessModifiers: false
 
 AlignConsecutiveAssignments: Consecutive
 AlignConsecutiveDeclarations: Consecutive

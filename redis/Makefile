@@ -1,10 +1,12 @@
-.PHONY: pre run clean
+.PHONY: pre run clean run-cpp
 
 .DEFAULT_GOAL := run
 
-CC := cc
 CCACHE := ccache
+CC := cc
 CFLAGS := -Wall -Wextra -g
+CXX := c++
+CXXFLAGS := -std=c++20 -O2 -Wall -Wextra -Wpedantic
 LDLIBS := -lhiredis
 
 pre:
@@ -21,3 +23,6 @@ run: bin/main
 
 clean:
 	@rm -r bin/
+
+run-cpp: pre
+	@$(CXX) $(CXXFLAGS) main.cpp -o bin/main $(LDLIBS) && ./bin/main
