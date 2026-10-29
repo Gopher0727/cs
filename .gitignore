@@ -1,0 +1,7 @@
+### Editor ###
+.zed
+.vscode
+.idea
+
+### OS ###
+.DS_Store
