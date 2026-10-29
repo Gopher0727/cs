@@ -4,6 +4,7 @@
 
 CCACHE := ccache
 
+# MaxOS
 INC := -I/opt/homebrew/include
 LIB := -L/opt/homebrew/lib
 
