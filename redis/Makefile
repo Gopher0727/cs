@@ -3,11 +3,18 @@
 .DEFAULT_GOAL := run
 
 CCACHE := ccache
+
+INC := -I/opt/homebrew/include
+LIB := -L/opt/homebrew/lib
+
 CC := cc
-CFLAGS := -Wall -Wextra -g
+CFLAGS := -Wall -Wextra -g $(INC)
+
 CXX := c++
-CXXFLAGS := -std=c++20 -O2 -Wall -Wextra -Wpedantic
-LDLIBS := -lhiredis
+CXXFLAGS := -std=c++20 -O2 -Wall -Wextra -Wpedantic $(INC)
+
+LDLIBS := $(LIB) \
+	  -lhiredis
 
 pre:
 	@mkdir -p bin/
@@ -16,7 +23,7 @@ bin/main.o: main.c | pre
 	@$(CCACHE) $(CC) $(CFLAGS) -c $< -o $@
 
 bin/main: bin/main.o
-	$(CC) -o $@ $^ $(LDLIBS)
+	@$(CC) -o $@ $^ $(LDLIBS)
 
 run: bin/main
 	@./bin/main
