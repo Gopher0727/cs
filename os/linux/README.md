@@ -12,3 +12,5 @@ MBR：第一个扇区 512 字节，最大只支持 2TB 磁盘，搭配固件 BIO
 
 - 内部命令：Shell 自带的，如 cd echo pwd export
 - 外部命令：磁盘上的程序文件，如 ls
+
+新加一块硬盘，需要 fdisk 分区，mkfs 格式化，mount 挂载，最后写进 /etc/fstab 开机自动挂载。
