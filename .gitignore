@@ -6,6 +6,9 @@
 ### OS ###
 .DS_Store
 
+### Language ###
+.venv/
+
 ### Test ###
 src/
 test/
