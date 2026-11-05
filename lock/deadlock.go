@@ -32,6 +32,18 @@ func (c *Counter) AddTwice(n int) {
 	c.Add(n)
 }
 
+func (c *Counter) NewAdd(n int) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	c.n += n
+}
+
+func (c *Counter) NewAddTwice(n int) {
+	c.NewAdd(n)
+	c.NewAdd(n)
+}
+
 func main() {
 	go func() {
 		log.Println("pprof: http://127.0.0.1:6060/debug/pprof")
@@ -39,8 +51,14 @@ func main() {
 	}()
 
 	counter := &Counter{}
+
+	// counter.Add(10)
+	// fmt.Println("Before: ", counter.n)
+	// counter.AddTwice(5)               // 死锁
+	// fmt.Println("After: ", counter.n) // 不会执行
+
 	counter.Add(10)
 	fmt.Println("Before: ", counter.n)
-	counter.AddTwice(5)               // 死锁
-	fmt.Println("After: ", counter.n) // 不会执行
+	counter.NewAddTwice(5)
+	fmt.Println("After: ", counter.n)
 }
