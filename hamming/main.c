@@ -66,9 +66,9 @@ int decode(uint16_t* code, uint16_t* data) {
                 return -1;
         }
 
-        uint16_t s = syndrome(*code);
-        int p      = odd_parity(*code);
-        int result = 0;
+        uint16_t s      = syndrome(*code);
+        int      p      = odd_parity(*code);
+        int      result = 0;
 
         if (s == 0 && p == 0) {
                 // nothing
@@ -109,7 +109,7 @@ int main(void) {
         // code ^= (1u << 7);
 
         uint16_t recovered;
-        int ret = decode(&code, &recovered);
+        int      ret = decode(&code, &recovered);
 
         printf("decode return = %d\n", ret);
         printf("recovered     = 0X%03x\n", recovered);
